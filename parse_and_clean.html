@@ -2,7 +2,7 @@
 <html>
 <head><meta charset="utf-8" />
 
-<title>generate dataframe and clean data</title>
+<title>parse_and_clean</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
@@ -13017,45 +13017,6 @@ ul.typeahead-list  > li > a.pull-right {
 .highlight .vm { color: #19177C } /* Name.Variable.Magic */
 .highlight .il { color: #666666 } /* Literal.Number.Integer.Long */
     </style>
-<style type="text/css">
-    
-/* Temporary definitions which will become obsolete with Notebook release 5.0 */
-.ansi-black-fg { color: #3E424D; }
-.ansi-black-bg { background-color: #3E424D; }
-.ansi-black-intense-fg { color: #282C36; }
-.ansi-black-intense-bg { background-color: #282C36; }
-.ansi-red-fg { color: #E75C58; }
-.ansi-red-bg { background-color: #E75C58; }
-.ansi-red-intense-fg { color: #B22B31; }
-.ansi-red-intense-bg { background-color: #B22B31; }
-.ansi-green-fg { color: #00A250; }
-.ansi-green-bg { background-color: #00A250; }
-.ansi-green-intense-fg { color: #007427; }
-.ansi-green-intense-bg { background-color: #007427; }
-.ansi-yellow-fg { color: #DDB62B; }
-.ansi-yellow-bg { background-color: #DDB62B; }
-.ansi-yellow-intense-fg { color: #B27D12; }
-.ansi-yellow-intense-bg { background-color: #B27D12; }
-.ansi-blue-fg { color: #208FFB; }
-.ansi-blue-bg { background-color: #208FFB; }
-.ansi-blue-intense-fg { color: #0065CA; }
-.ansi-blue-intense-bg { background-color: #0065CA; }
-.ansi-magenta-fg { color: #D160C4; }
-.ansi-magenta-bg { background-color: #D160C4; }
-.ansi-magenta-intense-fg { color: #A03196; }
-.ansi-magenta-intense-bg { background-color: #A03196; }
-.ansi-cyan-fg { color: #60C6C8; }
-.ansi-cyan-bg { background-color: #60C6C8; }
-.ansi-cyan-intense-fg { color: #258F8F; }
-.ansi-cyan-intense-bg { background-color: #258F8F; }
-.ansi-white-fg { color: #C5C1B4; }
-.ansi-white-bg { background-color: #C5C1B4; }
-.ansi-white-intense-fg { color: #A1A6B2; }
-.ansi-white-intense-bg { background-color: #A1A6B2; }
-
-.ansi-bold { font-weight: bold; }
-
-    </style>
 
 
 <style type="text/css">
@@ -13116,12 +13077,14 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="This-notebook-has-code-to-create-a-data-sheet-containing-all-the-salient-information-from-my-todo-lists">This notebook has code to create a data sheet containing all the salient information from my todo lists<a class="anchor-link" href="#This-notebook-has-code-to-create-a-data-sheet-containing-all-the-salient-information-from-my-todo-lists">&#182;</a></h1><h4 id="It-requires-a-combined-document-of-all-monthly-todos-with-a-few-specific-formatting-things:">It requires a combined document of all monthly todos with a few specific formatting things:<a class="anchor-link" href="#It-requires-a-combined-document-of-all-monthly-todos-with-a-few-specific-formatting-things:">&#182;</a></h4><p>The code assumes dates go from last to first.<br>
-Put the year first as a 'subtitle'<br>
-Put the month next as a 'title'<br>
-Put the day(s) next as a 'Heading 1'<br>
-Put each activity done on the day as 'normal'<br>
-Including a time at the start seperated from the activity description with ": " will allow the code to extract a time for that entry</p>
+<h1 id="This-notebook-has-code-to-create-a-data-sheet-containing-all-the-salient-information-from-my-todo-lists">This notebook has code to create a data sheet containing all the salient information from my todo lists<a class="anchor-link" href="#This-notebook-has-code-to-create-a-data-sheet-containing-all-the-salient-information-from-my-todo-lists">&#182;</a></h1><h2 id="It-requires-a-combined-document-of-all-monthly-todos-with-a-few-specific-formatting-things:">It requires a combined document of all monthly todos with a few specific formatting things:<a class="anchor-link" href="#It-requires-a-combined-document-of-all-monthly-todos-with-a-few-specific-formatting-things:">&#182;</a></h2><ul>
+<li>The code assumes dates go from last to first.  </li>
+<li>Put the year first as a 'subtitle'  </li>
+<li>Put the month next as a 'title'  </li>
+<li>Put the day(s) next as a 'Heading 1'  </li>
+<li>Put each activity done on the day as 'normal'  </li>
+<li>Including a time at the start seperated from the activity description with ": " will allow the code to extract a time for that entry</li>
+</ul>
 
 </div>
 </div>
@@ -13137,8 +13100,8 @@ Including a time at the start seperated from the activity description with ": " 
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">datetime</span>
 <span class="kn">import</span> <span class="nn">re</span>
-<span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">Counter</span>
-<span class="kn">from</span> <span class="nn">docx</span> <span class="k">import</span> <span class="n">Document</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">Counter</span>
+<span class="kn">from</span> <span class="nn">docx</span> <span class="kn">import</span> <span class="n">Document</span>
 </pre></div>
 
     </div>
@@ -13155,33 +13118,44 @@ Including a time at the start seperated from the activity description with ": " 
 <span class="c1">#The below functions do a single action and return something to do add to the dataframe</span>
 
 <span class="k">def</span> <span class="nf">make_dataframe_from_dict</span><span class="p">(</span><span class="n">rows_dict</span><span class="p">):</span>
-    <span class="c1">#requires...</span>
-    <span class="c1">#1. that all keys are lists of same length</span>
-    <span class="c1">#2. there is a &#39;day&#39; key</span>
-    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">rows_dict</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">rows_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">rows_dict</span><span class="p">[</span><span class="s1">&#39;day&#39;</span><span class="p">]))])</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Function to make a dataframe, specific for the dataset here.</span>
+<span class="sd">    requires that:</span>
+<span class="sd">    1. all keys are lists of the same length</span>
+<span class="sd">    2. there is a &quot;day&quot; key</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">dataframe_index</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">rows_dict</span><span class="p">[</span><span class="s1">&#39;day&#39;</span><span class="p">]))]</span>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">rows_dict</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">rows_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="n">index</span><span class="o">=</span><span class="n">dataframe_index</span><span class="p">)</span>
 
 <span class="k">def</span> <span class="nf">concatenate_runs</span><span class="p">(</span><span class="n">paragraph</span><span class="p">):</span>
-    <span class="c1">#takes all runs in a paragraph and glues them together</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Takes all runs in a paragraph and glues them together</span>
+<span class="sd">    &#39;&#39;&#39;</span>
     <span class="n">temp_string</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
     <span class="k">for</span> <span class="n">run</span> <span class="ow">in</span> <span class="n">paragraph</span><span class="o">.</span><span class="n">runs</span><span class="p">:</span>
         <span class="n">temp_string</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="n">run</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">temp_string</span>
 
 <span class="k">def</span> <span class="nf">is_strikethrough</span><span class="p">(</span><span class="n">paragraph</span><span class="p">):</span>
-    <span class="c1">#assumes input of a Document.paragraph</span>
-    <span class="c1">#returns True if strikethrough appears in any run in paragraph, otherwise returns False</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Looks for strikethrough formatting in a paragraph</span>
+<span class="sd">    Assumes input of a Document.paragraph object</span>
+<span class="sd">    Returns True if strikethrough appears in any run in paragraph, otherwise returns False</span>
+<span class="sd">    &#39;&#39;&#39;</span>
     <span class="k">for</span> <span class="n">run</span> <span class="ow">in</span> <span class="n">paragraph</span><span class="o">.</span><span class="n">runs</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">run</span><span class="o">.</span><span class="n">font</span><span class="o">.</span><span class="n">strike</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">True</span>
-    <span class="k">return</span> <span class="kc">False</span>    
+    <span class="k">return</span> <span class="kc">False</span>
 
 <span class="k">def</span> <span class="nf">get_color</span><span class="p">(</span><span class="n">paragraph</span><span class="p">):</span>
-    <span class="c1">#gets each color from the runs and returns them as a list</span>
-    <span class="c1">#useful to change RGB values into colour catergories</span>
-    <span class="c1">#Black = None</span>
-    <span class="c1">#Red = (255, 0, 0)</span>
-    <span class="c1">#Blue = (0, 112, 192)</span>
-    <span class="c1">#Green = (0, 176, 80)</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Gets each color from the runs and returns them as a list</span>
+<span class="sd">    useful to change RGB values into colour catergories</span>
+<span class="sd">    Black = None</span>
+<span class="sd">    Red = (255, 0, 0)</span>
+<span class="sd">    Blue = (0, 112, 192)</span>
+<span class="sd">    Green = (0, 176, 80)</span>
+<span class="sd">    &#39;&#39;&#39;</span>
     <span class="n">colors</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">run</span> <span class="ow">in</span> <span class="n">paragraph</span><span class="o">.</span><span class="n">runs</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">run</span><span class="o">.</span><span class="n">font</span><span class="o">.</span><span class="n">color</span><span class="o">.</span><span class="n">rgb</span> <span class="o">==</span> <span class="p">(</span><span class="mh">0x00</span><span class="p">,</span> <span class="mh">0x70</span><span class="p">,</span> <span class="mh">0xc0</span><span class="p">):</span>
@@ -13197,8 +13171,10 @@ Including a time at the start seperated from the activity description with ": " 
     <span class="k">return</span> <span class="n">colors</span>
 
 <span class="k">def</span> <span class="nf">get_time_taken</span><span class="p">(</span><span class="n">activity_text</span><span class="p">):</span>
-    <span class="c1">#assumes activity_text is type = string</span>
-    <span class="c1">#looks for &quot;: &quot; signature of time in concatenated run text and returns what came before it as raw string</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Assumes type(activity_text) is str</span>
+<span class="sd">    looks for &quot;: &quot; signature of time in concatenated run text and returns what came before it as raw string</span>
+<span class="sd">    &#39;&#39;&#39;</span>
     <span class="k">if</span> <span class="s2">&quot;: &quot;</span> <span class="ow">in</span> <span class="n">activity_text</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">activity_text</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;: &quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
@@ -13215,7 +13191,7 @@ Including a time at the start seperated from the activity description with ": " 
 <div class="prompt input_prompt">In&nbsp;[3]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#This grand unifying function uses the functions above to generate a dataframe</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#This function uses the functions above to generate a dataframe</span>
 
 <span class="k">def</span> <span class="nf">build_df_from_todo</span><span class="p">(</span><span class="n">input_doc</span><span class="p">):</span>
     <span class="c1">#this builds a dictionary table with a bunch of columns for various types of formatting</span>
@@ -13248,7 +13224,7 @@ Including a time at the start seperated from the activity description with ": " 
             <span class="n">rows_dict</span><span class="p">[</span><span class="s1">&#39;strike&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">is_strikethrough</span><span class="p">(</span><span class="n">para</span><span class="p">))</span>
             <span class="n">rows_dict</span><span class="p">[</span><span class="s1">&#39;colors&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">get_color</span><span class="p">(</span><span class="n">para</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;exception: paragraph style not expected&#39;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;paragraph style not expected&#39;</span><span class="p">)</span>
     
     <span class="k">return</span> <span class="n">rows_dict</span>
 </pre></div>
@@ -13260,12 +13236,12 @@ Including a time at the start seperated from the activity description with ": " 
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[41]:</div>
+<div class="prompt input_prompt">In&nbsp;[4]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#this code opens the combined text document and then feeds into the build_df_from_todo function to make a useful dataframe</span>
 
-<span class="n">test_doc</span> <span class="o">=</span> <span class="n">Document</span><span class="p">(</span><span class="s2">&quot;todo list.docx&quot;</span><span class="p">)</span>
+<span class="n">test_doc</span> <span class="o">=</span> <span class="n">Document</span><span class="p">(</span><span class="s2">&quot;/home/sp/Documents/new_todo_parsing/todo_files/todo list.docx&quot;</span><span class="p">)</span>
 <span class="n">todo_dict</span> <span class="o">=</span> <span class="n">build_df_from_todo</span><span class="p">(</span><span class="n">test_doc</span><span class="p">)</span>
 <span class="n">todo_table</span> <span class="o">=</span> <span class="n">make_dataframe_from_dict</span><span class="p">(</span><span class="n">todo_dict</span><span class="p">)</span>
 <span class="n">todo_table</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
@@ -13281,7 +13257,7 @@ Including a time at the start seperated from the activity description with ": " 
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[41]:</div>
+    <div class="prompt output_prompt">Out[4]:</div>
 
 
 
@@ -13425,7 +13401,8 @@ Name: 339, dtype: object</pre>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Remove-empty-'activity'-entries">Remove empty 'activity' entries<a class="anchor-link" href="#Remove-empty-'activity'-entries">&#182;</a></h2>
+<h2 id="Remove-empty-'activity'-entries">Remove empty 'activity' entries<a class="anchor-link" href="#Remove-empty-'activity'-entries">&#182;</a></h2><p>These are just empty rows in the input table.</p>
+
 </div>
 </div>
 </div>
@@ -13621,6 +13598,9 @@ Yes, (0x5b, 0x9b, 0xd5) and (0x00, 0x00, 0x00)</p>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">fix_black</span><span class="p">(</span><span class="n">temp_list</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Change (0,0,0) to &#39;black&#39; in todo_table[&#39;colors&#39;]</span>
+<span class="sd">    &#39;&#39;&#39;</span>
     <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">temp_list</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">item</span> <span class="o">==</span> <span class="p">(</span><span class="mh">0x00</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">):</span>
             <span class="k">return</span> <span class="p">[</span><span class="s1">&#39;black&#39;</span><span class="p">]</span>
@@ -13628,7 +13608,7 @@ Yes, (0x5b, 0x9b, 0xd5) and (0x00, 0x00, 0x00)</p>
 
 <span class="n">todo_table</span><span class="p">[</span><span class="s1">&#39;colors&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">todo_table</span><span class="p">[</span><span class="s1">&#39;colors&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">fix_black</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
 
-<span class="c1">#check that it worked</span>
+<span class="c1">#check that it worked. Should output that we have four colours in todo_table[&#39;colors&#39;]</span>
 <span class="n">temp_output</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="k">for</span> <span class="n">entry_list</span> <span class="ow">in</span> <span class="n">todo_table</span><span class="p">[</span><span class="s1">&#39;colors&#39;</span><span class="p">]:</span>
     <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">entry_list</span><span class="p">:</span> 
@@ -13674,11 +13654,15 @@ Yes, (0x5b, 0x9b, 0xd5) and (0x00, 0x00, 0x00)</p>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">contains_color</span><span class="p">(</span><span class="n">temp_list</span><span class="p">,</span> <span class="n">color</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Tests if colour is present in list of colours</span>
+<span class="sd">    &#39;&#39;&#39;</span>
     <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">temp_list</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">item</span> <span class="o">==</span> <span class="n">color</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">True</span>
     <span class="k">return</span> <span class="kc">False</span>
 
+<span class="c1">#cycle through colours and make individual columns using map on the colors column repeatedly</span>
 <span class="k">for</span> <span class="n">color</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="s1">&#39;green&#39;</span><span class="p">,</span> <span class="s1">&#39;blue&#39;</span><span class="p">]:</span>
     <span class="n">todo_table</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="n">color</span><span class="p">]</span> <span class="o">=</span> <span class="n">todo_table</span><span class="p">[</span><span class="s1">&#39;colors&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">contains_color</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">color</span><span class="p">))</span>
 </pre></div>
@@ -13688,19 +13672,220 @@ Yes, (0x5b, 0x9b, 0xd5) and (0x00, 0x00, 0x00)</p>
 </div>
 
 </div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Next-cell-checks-to-make-sure-the-number-of-entries-with-a-given-color-match-between-the-new-boolean-columns-and-the-original-'colors'-column">Next cell checks to make sure the number of entries with a given color match between the new boolean columns and the original 'colors' column<a class="anchor-link" href="#Next-cell-checks-to-make-sure-the-number-of-entries-with-a-given-color-match-between-the-new-boolean-columns-and-the-original-'colors'-column">&#182;</a></h2>
-</div>
-</div>
-</div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">In&nbsp;[12]:</div>
 <div class="inner_cell">
     <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">todo_table</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[12]:</div>
+
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>day</th>
+      <th>time taken</th>
+      <th>activity</th>
+      <th>strike</th>
+      <th>colors</th>
+      <th>black</th>
+      <th>red</th>
+      <th>green</th>
+      <th>blue</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Thursday 1st  March 2018</td>
+      <td>9</td>
+      <td>9: Take histo down to Nick in the store on lvl 1</td>
+      <td>True</td>
+      <td>[black, black, black, black, black]</td>
+      <td>True</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Thursday 1st  March 2018</td>
+      <td>9-10</td>
+      <td>9-10: MLI analysis KB22</td>
+      <td>True</td>
+      <td>[black]</td>
+      <td>True</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Thursday 1st  March 2018</td>
+      <td>10:30-1:30</td>
+      <td>10:30-1:30: Animal facilities induction</td>
+      <td>True</td>
+      <td>[black]</td>
+      <td>True</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Thursday 1st  March 2018</td>
+      <td>2-3</td>
+      <td>2-3: Microbiome meeting</td>
+      <td>True</td>
+      <td>[black]</td>
+      <td>True</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Thursday 1st  March 2018</td>
+      <td>2:30-5</td>
+      <td>2:30-5: KB22 Collagen Analysis</td>
+      <td>True</td>
+      <td>[black]</td>
+      <td>True</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>1437</th>
+      <td>Thursday 30th May 2019</td>
+      <td>NaN</td>
+      <td>Deal with RNA extraction problem</td>
+      <td>False</td>
+      <td>[red]</td>
+      <td>False</td>
+      <td>True</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>1438</th>
+      <td>Thursday 30th May 2019</td>
+      <td>3-5</td>
+      <td>3-5: TJ16 CAE Mast cell hunting</td>
+      <td>False</td>
+      <td>[red]</td>
+      <td>False</td>
+      <td>True</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>1439</th>
+      <td>Friday 31st May 2019</td>
+      <td>NaN</td>
+      <td>[sick]</td>
+      <td>False</td>
+      <td>[black]</td>
+      <td>True</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>1440</th>
+      <td>Friday 31st May 2019</td>
+      <td>9-10</td>
+      <td>9-10: Freezer move into loaned -80C. With Shan...</td>
+      <td>False</td>
+      <td>[red, red, red]</td>
+      <td>False</td>
+      <td>True</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>1441</th>
+      <td>Friday 31st May 2019</td>
+      <td>NaN</td>
+      <td>Make Iso’s for FACSDiva</td>
+      <td>False</td>
+      <td>[red, red]</td>
+      <td>False</td>
+      <td>True</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+  </tbody>
+</table>
+<p>1414 rows × 9 columns</p>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Next-cell-checks-to-make-sure-the-number-of-entries-with-a-given-color-match-between-the-new-boolean-columns-and-the-original-'colors'-column">Next cell checks to make sure the number of entries with a given color match between the new boolean columns and the original 'colors' column<a class="anchor-link" href="#Next-cell-checks-to-make-sure-the-number-of-entries-with-a-given-color-match-between-the-new-boolean-columns-and-the-original-'colors'-column">&#182;</a></h2><p>Can't just use Counter() here since it does not like lists. I feel I could do this more elegantly but frankly it doesn't need to be perfect.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[13]:</div>
+<div class="inner_cell">
+    <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">def_in_colors</span><span class="p">(</span><span class="n">pandas_series</span><span class="p">,</span> <span class="n">color</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Counts number of entries with </span>
+<span class="sd">    &#39;&#39;&#39;</span>
     <span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="k">for</span> <span class="n">entry_list</span> <span class="ow">in</span> <span class="n">pandas_series</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">entry_list</span><span class="p">:</span>
@@ -13750,7 +13935,7 @@ blue 578 578
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[13]:</div>
+<div class="prompt input_prompt">In&nbsp;[14]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">todo_table</span> <span class="o">=</span> <span class="n">todo_table</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;colors&#39;</span><span class="p">])</span>
@@ -13767,7 +13952,7 @@ blue 578 578
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[13]:</div>
+    <div class="prompt output_prompt">Out[14]:</div>
 
 
 
@@ -13848,16 +14033,16 @@ blue 578 578
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Lets-check-for-conflicts-between-formatting-options">Lets check for conflicts between formatting options<a class="anchor-link" href="#Lets-check-for-conflicts-between-formatting-options">&#182;</a></h1><p>Since I sometimes would combine multiple items on a single line, there can be e.g strikethrough and red on the same line even though those two things contradict each other<br>
-Only line 297 doesn't have black text, and it has blue instead<br>
-I think I will treat these as "partly done" as if they were green text</p>
+<h1 id="Lets-check-for-conflicts-between-formatting-options">Lets check for conflicts between formatting options<a class="anchor-link" href="#Lets-check-for-conflicts-between-formatting-options">&#182;</a></h1><p>Since I sometimes would combine multiple items on a single line, there can be e.g strikethrough (finished activity) and red (planned, but not done) on the same line even though those two things contradict each other<br>
+Only line 297 doesn't have black text, and it has blue instead (parts of this were done, parts unplanned, and some not done)<br>
+I will treat these as "partly done" as if they were green text. This will bias partly done upwards by 13 events.</p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[14]:</div>
+<div class="prompt input_prompt">In&nbsp;[15]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">todo_table</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">todo_table</span><span class="p">[</span><span class="s1">&#39;strike&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="kc">True</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">todo_table</span><span class="p">[</span><span class="s1">&#39;red&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="kc">True</span><span class="p">]</span>
@@ -13873,7 +14058,7 @@ I think I will treat these as "partly done" as if they were green text</p>
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[14]:</div>
+    <div class="prompt output_prompt">Out[15]:</div>
 
 
 
@@ -14072,7 +14257,7 @@ There is a few, so I will only print a few here</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[15]:</div>
+<div class="prompt input_prompt">In&nbsp;[16]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">todo_table</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">todo_table</span><span class="p">[</span><span class="s1">&#39;activity&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="s1">&#39;[&#39;</span> <span class="ow">in</span> <span class="n">x</span><span class="p">)</span> <span class="o">==</span> <span class="kc">True</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
@@ -14088,7 +14273,7 @@ There is a few, so I will only print a few here</p>
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[15]:</div>
+    <div class="prompt output_prompt">Out[16]:</div>
 
 
 
@@ -14191,14 +14376,14 @@ There is a few, so I will only print a few here</p>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Unmarked-notes..">Unmarked notes..<a class="anchor-link" href="#Unmarked-notes..">&#182;</a></h2><p>There are a few notes I did not mark with square bracket. Most are sick notes which are easy to find</p>
+<h2 id="Unmarked-notes..">Unmarked notes..<a class="anchor-link" href="#Unmarked-notes..">&#182;</a></h2><p>There are a few notes I did not mark with square bracket. Most are sick notes which are easy to find:</p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[16]:</div>
+<div class="prompt input_prompt">In&nbsp;[17]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">todo_table</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">todo_table</span><span class="p">[</span><span class="s1">&#39;activity&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="s1">&#39;sick&#39;</span> <span class="ow">in</span> <span class="n">x</span><span class="p">)</span> <span class="o">==</span> <span class="kc">True</span><span class="p">]</span>
@@ -14214,7 +14399,7 @@ There is a few, so I will only print a few here</p>
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[16]:</div>
+    <div class="prompt output_prompt">Out[17]:</div>
 
 
 
@@ -14402,7 +14587,7 @@ Notably the sick day it refers to is in this list!</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[17]:</div>
+<div class="prompt input_prompt">In&nbsp;[18]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">todo_table</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">675</span><span class="p">,</span><span class="s1">&#39;activity&#39;</span><span class="p">]</span>
@@ -14418,7 +14603,7 @@ Notably the sick day it refers to is in this list!</p>
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[17]:</div>
+    <div class="prompt output_prompt">Out[18]:</div>
 
 
 
@@ -14442,7 +14627,7 @@ Notably the sick day it refers to is in this list!</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[18]:</div>
+<div class="prompt input_prompt">In&nbsp;[19]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#First, there are some double spaces so lets fix that...</span>
@@ -14456,7 +14641,7 @@ Notably the sick day it refers to is in this list!</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[19]:</div>
+<div class="prompt input_prompt">In&nbsp;[20]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#check all entries have same number of words - All good!</span>
@@ -14473,7 +14658,7 @@ Notably the sick day it refers to is in this list!</p>
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[19]:</div>
+    <div class="prompt output_prompt">Out[20]:</div>
 
 
 
@@ -14490,10 +14675,198 @@ Notably the sick day it refers to is in this list!</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[20]:</div>
+<div class="prompt input_prompt">In&nbsp;[21]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">todo_table</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[21]:</div>
+
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>day</th>
+      <th>time taken</th>
+      <th>activity</th>
+      <th>strike</th>
+      <th>black</th>
+      <th>red</th>
+      <th>green</th>
+      <th>blue</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Thursday 1st March 2018</td>
+      <td>9</td>
+      <td>9: Take histo down to Nick in the store on lvl 1</td>
+      <td>True</td>
+      <td>True</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Thursday 1st March 2018</td>
+      <td>10:30-1:30</td>
+      <td>10:30-1:30: Animal facilities induction</td>
+      <td>True</td>
+      <td>True</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Thursday 1st March 2018</td>
+      <td>2-3</td>
+      <td>2-3: Microbiome meeting</td>
+      <td>True</td>
+      <td>True</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Thursday 1st March 2018</td>
+      <td>2:30-5</td>
+      <td>2:30-5: KB22 Collagen Analysis</td>
+      <td>True</td>
+      <td>True</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>Friday 2nd March 2018</td>
+      <td>9-4</td>
+      <td>9-4: BALF processing for endpoint (Alex)</td>
+      <td>True</td>
+      <td>True</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>1437</th>
+      <td>Thursday 30th May 2019</td>
+      <td>NaN</td>
+      <td>Deal with RNA extraction problem</td>
+      <td>False</td>
+      <td>False</td>
+      <td>True</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>1438</th>
+      <td>Thursday 30th May 2019</td>
+      <td>3-5</td>
+      <td>3-5: TJ16 CAE Mast cell hunting</td>
+      <td>False</td>
+      <td>False</td>
+      <td>True</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>1439</th>
+      <td>Friday 31st May 2019</td>
+      <td>NaN</td>
+      <td>[sick]</td>
+      <td>False</td>
+      <td>True</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>1440</th>
+      <td>Friday 31st May 2019</td>
+      <td>9-10</td>
+      <td>9-10: Freezer move into loaned -80C. With Shan...</td>
+      <td>False</td>
+      <td>False</td>
+      <td>True</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>1441</th>
+      <td>Friday 31st May 2019</td>
+      <td>NaN</td>
+      <td>Make Iso’s for FACSDiva</td>
+      <td>False</td>
+      <td>False</td>
+      <td>True</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+  </tbody>
+</table>
+<p>1413 rows × 8 columns</p>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[22]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">strip_date_suffixes</span><span class="p">(</span><span class="n">daytext</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Remove string date suffixes that get in the way of the formatter.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
     <span class="n">banned</span> <span class="o">=</span> <span class="s1">&#39;st,nd,rd,th,.&#39;</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">ban</span> <span class="ow">in</span> <span class="n">banned</span><span class="p">:</span>
         <span class="n">daytext</span> <span class="o">=</span> <span class="n">daytext</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">ban</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
@@ -14523,7 +14896,7 @@ Notably the sick day it refers to is in this list!</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[21]:</div>
+<div class="prompt input_prompt">In&nbsp;[23]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">todo_table</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
@@ -14539,7 +14912,7 @@ Notably the sick day it refers to is in this list!</p>
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[21]:</div>
+    <div class="prompt output_prompt">Out[23]:</div>
 
 
 
@@ -14645,7 +15018,7 @@ Notably the sick day it refers to is in this list!</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[22]:</div>
+<div class="prompt input_prompt">In&nbsp;[24]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">activity_status_finder</span><span class="p">(</span><span class="n">df_entry</span><span class="p">):</span>
@@ -14682,6 +15055,24 @@ Notably the sick day it refers to is in this list!</p>
 </div>
 </div>
 
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>/home/sp/miniconda3/envs/python37/lib/python3.7/site-packages/ipykernel_launcher.py:24: DeprecationWarning: The default dtype for empty Series will be &#39;object&#39; instead of &#39;float64&#39; in a future version. Specify a dtype explicitly to silence this warning.
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
@@ -14694,7 +15085,7 @@ This code does not contain things that had only a start time, which is okay sinc
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[23]:</div>
+<div class="prompt input_prompt">In&nbsp;[25]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">temp_series</span> <span class="o">=</span> <span class="n">todo_table</span><span class="p">[</span><span class="s2">&quot;time taken&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">todo_table</span><span class="p">[</span><span class="s2">&quot;time taken&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="s2">&quot;-&quot;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">))]</span>
@@ -14723,7 +15114,7 @@ This code does not contain things that had only a start time, which is okay sinc
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[24]:</div>
+<div class="prompt input_prompt">In&nbsp;[26]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#wrap in print func to reduce whitespace</span>
@@ -14765,7 +15156,7 @@ Although likely not clear to another reader, my personal experience with all of 
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[25]:</div>
+<div class="prompt input_prompt">In&nbsp;[27]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">todo_table</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">temp_series</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">temp_series</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="s1">&#39;6&#39;</span> <span class="ow">in</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">or</span> <span class="s1">&#39;7&#39;</span> <span class="ow">in</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">or</span> <span class="s1">&#39;8&#39;</span> <span class="ow">in</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span><span class="o">.</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,[</span><span class="s1">&#39;time taken&#39;</span><span class="p">,</span><span class="s1">&#39;activity&#39;</span><span class="p">]]</span>
@@ -14781,7 +15172,7 @@ Although likely not clear to another reader, my personal experience with all of 
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[25]:</div>
+    <div class="prompt output_prompt">Out[27]:</div>
 
 
 
@@ -14931,7 +15322,7 @@ Conclusion: Can safely assume all '8's are pm and all '9's are am</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[26]:</div>
+<div class="prompt input_prompt">In&nbsp;[28]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">todo_table</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">temp_series</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">temp_series</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="s1">&#39;8&#39;</span> <span class="ow">in</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">or</span> <span class="s1">&#39;9&#39;</span> <span class="ow">in</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span><span class="o">.</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,[</span><span class="s1">&#39;time taken&#39;</span><span class="p">,</span><span class="s1">&#39;activity&#39;</span><span class="p">]]</span>
@@ -14947,7 +15338,7 @@ Conclusion: Can safely assume all '8's are pm and all '9's are am</p>
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[26]:</div>
+    <div class="prompt output_prompt">Out[28]:</div>
 
 
 
@@ -15056,7 +15447,7 @@ Conclusion: Can safely assume all '8's are pm and all '9's are am</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[27]:</div>
+<div class="prompt input_prompt">In&nbsp;[29]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">convert_to_time</span><span class="p">(</span><span class="n">time_string</span><span class="p">,</span> <span class="n">start_time</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
@@ -15119,7 +15510,7 @@ Conclusion: Can safely assume all '8's are pm and all '9's are am</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[28]:</div>
+<div class="prompt input_prompt">In&nbsp;[30]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#make series of tuples with start and finish times</span>
@@ -15133,7 +15524,7 @@ Conclusion: Can safely assume all '8's are pm and all '9's are am</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[29]:</div>
+<div class="prompt input_prompt">In&nbsp;[31]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">start_only</span> <span class="o">=</span> <span class="n">temp_series</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">(</span><span class="n">convert_to_time</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span>
@@ -15155,7 +15546,7 @@ Conclusion: Can safely assume all '8's are pm and all '9's are am</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[30]:</div>
+<div class="prompt input_prompt">In&nbsp;[32]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#these three lines select just those with a single number</span>
@@ -15178,7 +15569,7 @@ Conclusion: Can safely assume all '8's are pm and all '9's are am</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[31]:</div>
+<div class="prompt input_prompt">In&nbsp;[33]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">todo_table</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="s1">&#39;start_time&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">start_only</span>
@@ -15196,7 +15587,7 @@ Conclusion: Can safely assume all '8's are pm and all '9's are am</p>
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[31]:</div>
+    <div class="prompt output_prompt">Out[33]:</div>
 
 
 
@@ -15288,7 +15679,7 @@ Conclusion: Can safely assume all '8's are pm and all '9's are am</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[32]:</div>
+<div class="prompt input_prompt">In&nbsp;[34]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">dtt2timestamp</span><span class="p">(</span><span class="n">dtt</span><span class="p">):</span>
@@ -15306,7 +15697,7 @@ Conclusion: Can safely assume all '8's are pm and all '9's are am</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[33]:</div>
+<div class="prompt input_prompt">In&nbsp;[35]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#select all events with both a start and end time</span>
@@ -15334,7 +15725,7 @@ Conclusion: Can safely assume all '8's are pm and all '9's are am</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[34]:</div>
+<div class="prompt input_prompt">In&nbsp;[36]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">invert_bool</span><span class="p">(</span><span class="n">bool_entry</span><span class="p">):</span>
@@ -15352,7 +15743,7 @@ Conclusion: Can safely assume all '8's are pm and all '9's are am</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[35]:</div>
+<div class="prompt input_prompt">In&nbsp;[37]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">todo_table</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
@@ -15368,7 +15759,7 @@ Conclusion: Can safely assume all '8's are pm and all '9's are am</p>
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[35]:</div>
+    <div class="prompt output_prompt">Out[37]:</div>
 
 
 
@@ -15466,7 +15857,7 @@ Conclusion: Can safely assume all '8's are pm and all '9's are am</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[36]:</div>
+<div class="prompt input_prompt">In&nbsp;[38]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">Counter</span><span class="p">(</span><span class="n">todo_table</span><span class="p">[</span><span class="s1">&#39;day&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]))</span>
@@ -15482,7 +15873,7 @@ Conclusion: Can safely assume all '8's are pm and all '9's are am</p>
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[36]:</div>
+    <div class="prompt output_prompt">Out[38]:</div>
 
 
 
@@ -15504,7 +15895,7 @@ Conclusion: Can safely assume all '8's are pm and all '9's are am</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[37]:</div>
+<div class="prompt input_prompt">In&nbsp;[39]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#create &quot;dayofweek&quot; col</span>
@@ -15527,7 +15918,7 @@ Then drops formatting cols and saves again as final, as both csv and excel</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[38]:</div>
+<div class="prompt input_prompt">In&nbsp;[40]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#reorganise columns for readability</span>
@@ -15544,7 +15935,7 @@ Then drops formatting cols and saves again as final, as both csv and excel</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[39]:</div>
+<div class="prompt input_prompt">In&nbsp;[41]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">todo_table</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s1">&#39;parsed todo table with formatting cols.csv&#39;</span><span class="p">)</span>
@@ -15560,7 +15951,7 @@ Then drops formatting cols and saves again as final, as both csv and excel</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[40]:</div>
+<div class="prompt input_prompt">In&nbsp;[42]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">todo_format</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
@@ -15576,7 +15967,7 @@ Then drops formatting cols and saves again as final, as both csv and excel</p>
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[40]:</div>
+    <div class="prompt output_prompt">Out[42]:</div>
 
 
 
