@@ -13241,7 +13241,7 @@ div#notebook {
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#this code opens the combined text document and then feeds into the build_df_from_todo function to make a useful dataframe</span>
 
-<span class="n">test_doc</span> <span class="o">=</span> <span class="n">Document</span><span class="p">(</span><span class="s2">&quot;/home/sp/Documents/new_todo_parsing/todo_files/todo list.docx&quot;</span><span class="p">)</span>
+<span class="n">test_doc</span> <span class="o">=</span> <span class="n">Document</span><span class="p">(</span><span class="s2">&quot;C:</span><span class="se">\\</span><span class="s2">Users</span><span class="se">\\</span><span class="s2">c3126</span><span class="se">\\</span><span class="s2">OneDrive</span><span class="se">\\</span><span class="s2">coding projects</span><span class="se">\\</span><span class="s2">todo-analysis development</span><span class="se">\\</span><span class="s2">real_data</span><span class="se">\\</span><span class="s2">todo list.docx&quot;</span><span class="p">)</span>
 <span class="n">todo_dict</span> <span class="o">=</span> <span class="n">build_df_from_todo</span><span class="p">(</span><span class="n">test_doc</span><span class="p">)</span>
 <span class="n">todo_table</span> <span class="o">=</span> <span class="n">make_dataframe_from_dict</span><span class="p">(</span><span class="n">todo_dict</span><span class="p">)</span>
 <span class="n">todo_table</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
@@ -15055,24 +15055,6 @@ Notably the sick day it refers to is in this list!</p>
 </div>
 </div>
 
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>/home/sp/miniconda3/envs/python37/lib/python3.7/site-packages/ipykernel_launcher.py:24: DeprecationWarning: The default dtype for empty Series will be &#39;object&#39; instead of &#39;float64&#39; in a future version. Specify a dtype explicitly to silence this warning.
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
@@ -15938,10 +15920,11 @@ Then drops formatting cols and saves again as final, as both csv and excel</p>
 <div class="prompt input_prompt">In&nbsp;[41]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">todo_table</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s1">&#39;parsed todo table with formatting cols.csv&#39;</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">path</span> <span class="o">=</span> <span class="s1">&#39;C:</span><span class="se">\\</span><span class="s1">Users\c3126</span><span class="se">\\</span><span class="s1">OneDrive</span><span class="se">\\</span><span class="s1">coding projects</span><span class="se">\\</span><span class="s1">todo-analysis development</span><span class="se">\\</span><span class="s1">real_data</span><span class="se">\\</span><span class="s1">&#39;</span>
+<span class="n">todo_table</span><span class="o">.</span><span class="n">to_csv</span><span class="p">((</span><span class="n">path</span><span class="o">+</span><span class="s1">&#39;parsed todo table with formatting cols.csv&#39;</span><span class="p">))</span>
 <span class="n">todo_format</span> <span class="o">=</span> <span class="n">todo_table</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;strike&#39;</span><span class="p">,</span><span class="s1">&#39;black&#39;</span><span class="p">,</span><span class="s1">&#39;red&#39;</span><span class="p">,</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="s1">&#39;green&#39;</span><span class="p">,</span> <span class="s1">&#39;time taken&#39;</span><span class="p">])</span>
-<span class="n">todo_format</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s1">&#39;parsed todo table.csv&#39;</span><span class="p">)</span>
-<span class="n">todo_format</span><span class="o">.</span><span class="n">to_excel</span><span class="p">(</span><span class="s1">&#39;parsed todo table.xlsx&#39;</span><span class="p">)</span>
+<span class="n">todo_format</span><span class="o">.</span><span class="n">to_csv</span><span class="p">((</span><span class="n">path</span><span class="o">+</span><span class="s1">&#39;parsed todo table.csv&#39;</span><span class="p">))</span>
+<span class="c1">#todo_format.to_excel((path+&#39;parsed todo table.xlsx&#39;))</span>
 </pre></div>
 
     </div>
